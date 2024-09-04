@@ -1,0 +1,7 @@
+# Pastas do vscode
+.vscode/
+.vscode/*
+
+# Arquivos de saída
+output
+output/*

@@ -21,7 +21,7 @@ void readProcesses(const char *fileName, Process processes[], int *numProcesses)
     }
 
     Process p;
-    sscanf(line, "%ld,\"%[^\"]\",\"%[^\"]\",{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
+    sscanf(line, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
 
     processes[*numProcesses] = p;
     (*numProcesses)++;
@@ -44,7 +44,7 @@ void printProcesses(Process processes[], int numProcesses)
   }
 }
 
-void selectionSortProcess(Process process[], int n)
+void selectionSortById(Process processes[], int n)
 {
   int min;
   for (int i = 0; i < n - 1; i++)
@@ -52,13 +52,25 @@ void selectionSortProcess(Process process[], int n)
     min = i;
     for (int j = i + 1; j < n; j++)
     {
-      if (process[j].id < process[i].id)
+      if (processes[j].id < processes[i].id)
       {
         min = j;
       }
     }
-    Process aux = process[min];
-    process[min] = process[i];
-    process[i] = aux;
+    Process aux;
+    aux.id = processes[min].id;
+    processes[min].id = processes[i].id;
+    processes[i].id = aux.id;
+  }
+
+  for (int i = 0; i < n; i++)
+  {
+    printf("ID: %ld\n", processes[i].id);
+    printf("Numero: %s\n", processes[i].numero);
+    printf("Data Ajuizamento: %s\n", processes[i].data_ajuizamento);
+    printf("ID Classe: %d\n", processes[i].id_classe);
+    printf("ID Assunto: %d\n", processes[i].id_assunto);
+    printf("Ano Eleicao: %d\n", processes[i].ano_eleicao);
+    printf("\n");
   }
 }

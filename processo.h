@@ -18,7 +18,7 @@ typedef struct
 } Process;
 
 void readProcesses(const char *fileName, Process processes[], int *numProcesses);
-void selectionSortProcess(Process process[], int n);
+void selectionSortById(Process process[], int n);
 void printProcesses(Process processes[], int numProcesses);
 
 #endif

@@ -4,6 +4,8 @@
 #include <string.h>
 #include <time.h>
 
+#define MAX_PROCESS 100
+
 typedef struct
 {
   int dia;
@@ -20,5 +22,10 @@ typedef struct
   int id_assunto;
   int ano_eleicao;
 } Processo;
+
+Processo process[MAX_PROCESS];
+
+int readValueProcess(char *fileName);
+void selectionSortProcess(Processo process[], int n);
 
 #endif

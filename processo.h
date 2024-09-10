@@ -4,28 +4,21 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_PROCESS 100
+#define MAX_LINE_LENGTH 256
+#define MAX_PROCESSES 18393
 
 typedef struct
 {
-  int dia;
-  int mes;
-  int ano;
-} Data;
-
-typedef struct
-{
-  int id;
-  char numero[50];
-  Data data_ajuizamento;
+  long id;
+  char numero[20];
+  char data_ajuizamento[25];
   int id_classe;
   int id_assunto;
   int ano_eleicao;
-} Processo;
+} Process;
 
-Processo process[MAX_PROCESS];
-
-int readValueProcess(char *fileName);
-void selectionSortProcess(Processo process[], int n);
+void readProcesses(const char *fileName, Process processes[], int *numProcesses);
+void selectionSortProcess(Process process[], int n);
+void printProcesses(Process processes[], int numProcesses);
 
 #endif

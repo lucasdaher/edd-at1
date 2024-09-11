@@ -32,15 +32,24 @@ void readProcesses(const char *fileName, Process processes[], int *numProcesses)
 
 void printProcesses(Process processes[], int numProcesses)
 {
-  for (int i = 0; i < numProcesses; i++)
+  FILE *file = fopen("processos.csv", "w");
+
+  if (file == NULL)
   {
-    printf("ID: %ld\n", processes[i].id);
-    printf("Numero: %s\n", processes[i].numero);
-    printf("Data Ajuizamento: %s\n", processes[i].data_ajuizamento);
-    printf("ID Classe: %d\n", processes[i].id_classe);
-    printf("ID Assunto: %d\n", processes[i].id_assunto);
-    printf("Ano Eleicao: %d\n", processes[i].ano_eleicao);
-    printf("\n");
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+  else
+  {
+    fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
+    for (int i = 0; i < numProcesses; i++)
+    {
+      fprintf(file, "%ld,\"%lld\",\"%s\",{%d},{%d},%d\n",
+              processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
+              processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
+    }
+
+    fclose(file);
   }
 }
 
@@ -63,14 +72,24 @@ void selectionSortById(Process processes[], int n)
     processes[i].id = aux.id;
   }
 
-  for (int i = 0; i < n; i++)
+  FILE *file = fopen("processos.csv", "w");
+
+  if (file == NULL)
   {
-    printf("ID: %ld\n", processes[i].id);
-    printf("Numero: %s\n", processes[i].numero);
-    printf("Data Ajuizamento: %s\n", processes[i].data_ajuizamento);
-    printf("ID Classe: %d\n", processes[i].id_classe);
-    printf("ID Assunto: %d\n", processes[i].id_assunto);
-    printf("Ano Eleicao: %d\n", processes[i].ano_eleicao);
-    printf("\n");
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+  else
+  {
+    fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
+    for (int i = 0; i < n; i++)
+    {
+      fprintf(file, "%ld,\"%s\",\"%s\",{%d},{%d},%d\n",
+              processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
+              processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
+      printf("%ld - Gravado com sucesso.\n", processes[i].id);
+    }
+
+    fclose(file);
   }
 }

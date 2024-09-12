@@ -10,6 +10,6 @@ int main()
   int numProcesses = 0;
 
   readProcesses("processosOriginal.csv", processes, &numProcesses);
-  selectionSortById(processes, numProcesses);
+  ordenarPorId(processes, numProcesses);
   return 0;
 }

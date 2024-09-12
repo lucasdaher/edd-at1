@@ -1,5 +1,8 @@
 #include "processo.h"
 
+// Essa função é responsável por contar quantos processos existem dentro
+// do arquivo de processos. Após contabilizar, ele recebe os dados que
+// estão contidos dentro deste CSV e armazenam em um vetor de struct.
 void readProcesses(char *fileName, Process processes[], int *numProcesses)
 {
   FILE *file = fopen(fileName, "r");
@@ -33,8 +36,9 @@ void readProcesses(char *fileName, Process processes[], int *numProcesses)
 // Esta função é responsável por ordenar de forma crescente
 // todos os processos pelo seu ID, e após a ordenação, ele
 // gera um novo arquivo CSV e abre o arquivo no Excel.
-void selectionSortById(Process processes[], int n)
+void ordenarPorId(Process processes[], int n)
 {
+  // Algoritmo de ordenação | Selection Sort
   int min;
   Process temp;
   for (int i = 0; i < n - 1; i++)
@@ -60,6 +64,8 @@ void selectionSortById(Process processes[], int n)
     perror("O arquivo nao pode ser lido.\n");
     exit(EXIT_FAILURE);
   }
+
+  // Adiciona o HEADER do arquivo CSV antes da implementação dos dados.
   fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
 
   for (int i = 0; i < n; i++)

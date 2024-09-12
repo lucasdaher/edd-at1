@@ -18,6 +18,6 @@ typedef struct
 } Process;
 
 void readProcesses(char *fileName, Process processes[], int *numProcesses);
-void selectionSortById(Process process[], int n);
+void ordenarPorId(Process process[], int n);
 
 #endif

@@ -1,6 +1,6 @@
 #include "processo.h"
 
-void readProcesses(const char *fileName, Process processes[], int *numProcesses)
+void readProcesses(char *fileName, Process processes[], int *numProcesses)
 {
   FILE *file = fopen(fileName, "r");
   if (file == NULL)
@@ -21,6 +21,7 @@ void readProcesses(const char *fileName, Process processes[], int *numProcesses)
     }
 
     Process p;
+    printf("Escaneando dados do arquivo de processos.\n");
     sscanf(line, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
 
     processes[*numProcesses] = p;
@@ -30,46 +31,24 @@ void readProcesses(const char *fileName, Process processes[], int *numProcesses)
   fclose(file);
 }
 
-void printProcesses(Process processes[], int numProcesses)
-{
-  FILE *file = fopen("processos.csv", "w");
-
-  if (file == NULL)
-  {
-    perror("O arquivo nao pode ser lido.\n");
-    exit(EXIT_FAILURE);
-  }
-  else
-  {
-    fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
-    for (int i = 0; i < numProcesses; i++)
-    {
-      fprintf(file, "%ld,\"%lld\",\"%s\",{%d},{%d},%d\n",
-              processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
-              processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
-    }
-
-    fclose(file);
-  }
-}
-
 void selectionSortById(Process processes[], int n)
 {
   int min;
+  Process temp;
   for (int i = 0; i < n - 1; i++)
   {
     min = i;
     for (int j = i + 1; j < n; j++)
     {
-      if (processes[j].id < processes[i].id)
+      if (processes[j].id < processes[min].id)
       {
         min = j;
       }
     }
-    Process aux;
-    aux.id = processes[min].id;
+
+    temp.id = processes[min].id;
     processes[min].id = processes[i].id;
-    processes[i].id = aux.id;
+    processes[i].id = temp.id;
   }
 
   FILE *file = fopen("processos.csv", "w");
@@ -79,17 +58,19 @@ void selectionSortById(Process processes[], int n)
     perror("O arquivo nao pode ser lido.\n");
     exit(EXIT_FAILURE);
   }
-  else
-  {
-    fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
-    for (int i = 0; i < n; i++)
-    {
-      fprintf(file, "%ld,\"%s\",\"%s\",{%d},{%d},%d\n",
-              processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
-              processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
-      printf("%ld - Gravado com sucesso.\n", processes[i].id);
-    }
+  fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
+  printf("Header criado com sucesso no arquivo.\n\n");
+  printf("Tentando entrar no laco...\n");
 
-    fclose(file);
+  for (int i = 0; i < n; i++)
+  {
+    printf("Entrou no laco...\n");
+    printf("Iteracao %d\n", i);
+    fprintf(file, "%ld,%s,%s,{%d},{%d},%d\n",
+            processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
+            processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
+    printf("%ld - Gravado com sucesso.\n", processes[i].id);
   }
+
+  fclose(file);
 }

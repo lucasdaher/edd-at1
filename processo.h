@@ -20,5 +20,6 @@ typedef struct
 void readProcesses(const char *fileName, Process processes[], int *numProcesses);
 void selectionSortById(Process process[], int n);
 void printProcesses(Process processes[], int numProcesses);
+int countByIdClass(Process Process[], int numProcesses, int id_classe_procurado);
 
 #endif

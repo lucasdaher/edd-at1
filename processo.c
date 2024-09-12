@@ -21,7 +21,6 @@ void readProcesses(char *fileName, Process processes[], int *numProcesses)
     }
 
     Process p;
-    printf("Escaneando dados do arquivo de processos.\n");
     sscanf(line, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
 
     processes[*numProcesses] = p;
@@ -31,6 +30,9 @@ void readProcesses(char *fileName, Process processes[], int *numProcesses)
   fclose(file);
 }
 
+// Esta função é responsável por ordenar de forma crescente
+// todos os processos pelo seu ID, e após a ordenação, ele
+// gera um novo arquivo CSV e abre o arquivo no Excel.
 void selectionSortById(Process processes[], int n)
 {
   int min;
@@ -59,18 +61,18 @@ void selectionSortById(Process processes[], int n)
     exit(EXIT_FAILURE);
   }
   fprintf(file, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
-  printf("Header criado com sucesso no arquivo.\n\n");
-  printf("Tentando entrar no laco...\n");
 
   for (int i = 0; i < n; i++)
   {
-    printf("Entrou no laco...\n");
-    printf("Iteracao %d\n", i);
-    fprintf(file, "%ld,%s,%s,{%d},{%d},%d\n",
+    fprintf(file, "%ld,\"%s\",%s,{%d},{%d},%d\n",
             processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
             processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
     printf("%ld - Gravado com sucesso.\n", processes[i].id);
   }
+  system("cls");
+  printf("Abrindo Excel com os processos ordenados de forma crescente pelo seu identificador.\n");
+
+  system("start excel.exe processos.csv");
 
   fclose(file);
 }

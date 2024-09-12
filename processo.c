@@ -93,3 +93,14 @@ void selectionSortById(Process processes[], int n)
     fclose(file);
   }
 }
+
+int countByIdClass(Process processes[], int numProcesses, int id_classe_procurado) 
+{
+    int count = 0;
+
+    for (int i = 0; i < numProcesses; i++) 
+      if (processes[i].id_classe == id_classe_procurado) 
+        count++;   
+
+    return count;
+}

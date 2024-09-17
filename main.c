@@ -9,7 +9,10 @@ int main()
   Process processes[MAX_PROCESSES];
   int numProcesses = 0;
 
-  readProcesses("processosOriginal.csv", processes, &numProcesses);
-  ordenarPorId(processes, numProcesses);
+  // readProcesses("processosOriginal.csv", processes, &numProcesses);
+  // ordenarPorId(processes, numProcesses);
+
+  countClassIds("processosOriginal.csv");
+
   return 0;
 }

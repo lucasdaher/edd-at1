@@ -33,6 +33,52 @@ void readProcesses(char *fileName, Process processes[], int *numProcesses)
   fclose(file);
 }
 
+void countClassIds(char *fileName)
+{
+  FILE *file = fopen(fileName, "r");
+
+  if (file == NULL)
+  {
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  char line[MAX_LINE_LENGTH];
+  int position = 0;
+  int classCounts[MAX_PROCESSES] = {0};
+
+  fgets(line, MAX_LINE_LENGTH, file);
+
+  while (fgets(line, MAX_LINE_LENGTH, file) != NULL)
+  {
+    // Extrair o id_classe da linha
+    char *start = strchr(line, '{');
+    char *end = strchr(line, '}');
+    if (start != NULL && end != NULL)
+    {
+      *end = '\0'; // Substituir '}' por '\0' para criar uma string válida
+      int classId = atoi(start + 1);
+
+      // Incrementar a contagem para o id_classe
+      if (classId >= 0 && classId < MAX_PROCESSES)
+      {
+        classCounts[classId]++;
+      }
+    }
+  }
+
+  fclose(file);
+
+  // Imprimir os resultados
+  for (int i = 0; i < MAX_PROCESSES; i++)
+  {
+    if (classCounts[i] > 0)
+    {
+      printf("id_classe %d: %d processos\n", i, classCounts[i]);
+    }
+  }
+}
+
 // Esta função é responsável por ordenar de forma crescente
 // todos os processos pelo seu ID, e após a ordenação, ele
 // gera um novo arquivo CSV e abre o arquivo no Excel.

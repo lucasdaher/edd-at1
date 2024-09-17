@@ -19,5 +19,6 @@ typedef struct
 
 void readProcesses(char *fileName, Process processes[], int *numProcesses);
 void ordenarPorId(Process process[], int n);
+void countClassIds(char *fileName)
 
 #endif

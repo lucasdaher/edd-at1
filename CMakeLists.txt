@@ -7,5 +7,5 @@ include_directories(.)
 
 add_executable(estrutura_dados_at1
     main.c
-    processo.h
-    processo.c)
+    processo.c
+    processo.h)

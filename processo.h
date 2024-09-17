@@ -18,8 +18,8 @@ typedef struct
   int ano_eleicao;
 } Process;
 
-void readProcesses(char *fileName, Process processes[], int *numProcesses);
+void readProcesses(const char *fileName, Process processes[], int *numProcesses);
 void ordenarPorId(Process process[], int n);
-void countClassIds(char *fileName);
+void contarPorIdClasse(const char *fileName, int idClasse);
 
 #endif

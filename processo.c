@@ -3,7 +3,7 @@
 // Essa função é responsável por contar quantos processos existem dentro
 // do arquivo de processos. Após contabilizar, ele recebe os dados que
 // estão contidos dentro deste CSV e armazenam em um vetor de struct.
-void readProcesses(char *fileName, Process processes[], int *numProcesses)
+void readProcesses(const char *fileName, Process processes[], int *numProcesses)
 {
   FILE *file = fopen(fileName, "r");
   if (file == NULL)
@@ -33,53 +33,84 @@ void readProcesses(char *fileName, Process processes[], int *numProcesses)
   fclose(file);
 }
 
-void countClassIds(char *fileName)
-{
+// void countClassIds(const char *fileName)
+// {
+//   FILE *file = fopen(fileName, "r");
+//
+//   if (file == NULL)
+//   {
+//     perror("O arquivo nao pode ser lido.\n");
+//     exit(EXIT_FAILURE);
+//   }
+//
+//   char line[MAX_LINE_LENGTH];
+//   int classCounts[MAX_PROCESSES] = {0};
+//
+//   fgets(line, MAX_LINE_LENGTH, file);
+//
+//   while (fgets(line, MAX_LINE_LENGTH, file) != NULL)
+//   {
+//     char *start = strchr(line, '{');
+//     char *end = strchr(line, '}');
+//     if (start != NULL && end != NULL)
+//     {
+//       *end = '\0';
+//       int classId = atoi(start + 1);
+//
+//       if (classId >= 0 && classId < MAX_PROCESSES)
+//       {
+//         classCounts[classId]++;
+//       }
+//     }
+//   }
+//
+//   fclose(file);
+//
+//   // Imprimir os resultados
+//   for (int i = 0; i < MAX_PROCESSES; i++)
+//   {
+//     if (classCounts[i] > 0)
+//     {
+//       printf("id_classe %d: %d processos\n", i, classCounts[i]);
+//     }
+//   }
+// }
+
+
+void contarPorIdClasse(const char *fileName, int idClasse) {
   FILE *file = fopen(fileName, "r");
 
-  if (file == NULL)
-  {
+  if (file == NULL) {
     perror("O arquivo nao pode ser lido.\n");
     exit(EXIT_FAILURE);
   }
 
   char line[MAX_LINE_LENGTH];
-  int classCounts[MAX_PROCESSES] = {0};
+  int count = 0;
 
-  fgets(line, MAX_LINE_LENGTH, file);
-
-  while (fgets(line, MAX_LINE_LENGTH, file) != NULL)
-  {
+  while (fgets(line, MAX_LINE_LENGTH, file)) {
     char *start = strchr(line, '{');
     char *end = strchr(line, '}');
-    if (start != NULL && end != NULL)
-    {
+    if (start != NULL && end != NULL) {
       *end = '\0';
       int classId = atoi(start + 1);
 
-      if (classId >= 0 && classId < MAX_PROCESSES)
-      {
-        classCounts[classId]++;
+      if (classId == idClasse) {
+        count++;
       }
     }
   }
 
   fclose(file);
 
-  // Imprimir os resultados
-  for (int i = 0; i < MAX_PROCESSES; i++)
-  {
-    if (classCounts[i] > 0)
-    {
-      printf("id_classe %d: %d processos\n", i, classCounts[i]);
-    }
+  if (count > 0) {
+    printf("id_classe %d: %d processos\n", idClasse, count);
+  } else {
+    printf("id_classe %d nao encontrado.\n", idClasse);
   }
 }
 
-// Esta função é responsável por ordenar de forma crescente
-// todos os processos pelo seu ID, e após a ordenação, ele
-// gera um novo arquivo CSV e abre o arquivo no Excel.
-void ordenarPorId(Process processes[], int n)
+void ordenarPorId(Process process[], int n)
 {
   // Algoritmo de ordenação | Selection Sort
   int min;
@@ -89,15 +120,15 @@ void ordenarPorId(Process processes[], int n)
     min = i;
     for (int j = i + 1; j < n; j++)
     {
-      if (processes[j].id < processes[min].id)
+      if (process[j].id < process[min].id)
       {
         min = j;
       }
     }
 
-    temp.id = processes[min].id;
-    processes[min].id = processes[i].id;
-    processes[i].id = temp.id;
+    temp.id = process[min].id;
+    process[min].id = process[i].id;
+    process[i].id = temp.id;
   }
 
   FILE *file = fopen("processos.csv", "w");
@@ -114,9 +145,9 @@ void ordenarPorId(Process processes[], int n)
   for (int i = 0; i < n; i++)
   {
     fprintf(file, "%ld,\"%s\",%s,{%d},{%d},%d\n",
-            processes[i].id, processes[i].numero, processes[i].data_ajuizamento,
-            processes[i].id_classe, processes[i].id_assunto, processes[i].ano_eleicao);
-    printf("%ld - Gravado com sucesso.\n", processes[i].id);
+            process[i].id, process[i].numero, process[i].data_ajuizamento,
+            process[i].id_classe, process[i].id_assunto, process[i].ano_eleicao);
+    printf("%ld - Gravado com sucesso.\n", process[i].id);
   }
   system("cls");
   printf("Abrindo Excel com os processos ordenados de forma crescente pelo seu identificador.\n");

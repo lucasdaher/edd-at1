@@ -1,5 +1,17 @@
 # ninja log v6
-6	101	7483059207687194	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
-11	103	7483059207737186	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
-4	98	7483059966443465	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
-10	100	7483059966503467	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+3	106	7483061212519585	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+9	105	7483061212579584	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+10	107	7483062597745821	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+4	108	7483062597685804	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+4	99	7483063146742224	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+4	97	7483063361739065	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+10	112	7483063361789066	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+112	231	7483063362814260	estrutura_dados_at1.exe	fd21e7c25c6ac4e
+4	95	7483068929098534	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+10	102	7483068929158549	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+102	210	7483068930069803	estrutura_dados_at1.exe	fd21e7c25c6ac4e
+4	95	7483069365774761	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+95	202	7483069366679875	estrutura_dados_at1.exe	fd21e7c25c6ac4e
+4	96	7483072374447749	CMakeFiles/estrutura_dados_at1.dir/main.c.obj	86d57d787e4931e2
+10	99	7483072374507765	CMakeFiles/estrutura_dados_at1.dir/processo.c.obj	1e3d46c7379d56f8
+99	201	7483072375392914	estrutura_dados_at1.exe	fd21e7c25c6ac4e

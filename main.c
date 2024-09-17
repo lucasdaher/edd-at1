@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "processo.h"
-#include "processo.c"
 
 int main()
 {
@@ -12,7 +11,11 @@ int main()
   // readProcesses("processosOriginal.csv", processes, &numProcesses);
   // ordenarPorId(processes, numProcesses);
 
-  countClassIds("processosOriginal.csv");
+  // int idClasse;
+  // printf("Informe o 'idClasse' desejado: \n");
+  // scanf("%d", &idClasse);
+  //
+  // contarPorIdClasse("processosOriginal.csv", idClasse);
 
   return 0;
 }

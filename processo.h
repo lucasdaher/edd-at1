@@ -1,11 +1,12 @@
 #ifndef PROCESSO_H
 #define PROCESSO_H
 
-#include <string.h>
-#include <time.h>
-
 #define MAX_LINE_LENGTH 256
 #define MAX_PROCESSES 18393
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct
 {
@@ -19,6 +20,6 @@ typedef struct
 
 void readProcesses(char *fileName, Process processes[], int *numProcesses);
 void ordenarPorId(Process process[], int n);
-void countClassIds(char *fileName)
+void countClassIds(char *fileName);
 
 #endif

@@ -2,6 +2,9 @@
 .vscode/
 .vscode/*
 
+.idea
+.idea/*
+
 # Arquivos de saída
 output
 output/*

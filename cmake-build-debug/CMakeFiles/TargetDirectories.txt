@@ -1,0 +1,3 @@
+C:/Users/ducas/CLionProjects/estrutura-dados-at1/cmake-build-debug/CMakeFiles/estrutura_dados_at1.dir
+C:/Users/ducas/CLionProjects/estrutura-dados-at1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ducas/CLionProjects/estrutura-dados-at1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

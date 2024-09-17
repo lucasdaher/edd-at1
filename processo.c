@@ -44,22 +44,19 @@ void countClassIds(char *fileName)
   }
 
   char line[MAX_LINE_LENGTH];
-  int position = 0;
   int classCounts[MAX_PROCESSES] = {0};
 
   fgets(line, MAX_LINE_LENGTH, file);
 
   while (fgets(line, MAX_LINE_LENGTH, file) != NULL)
   {
-    // Extrair o id_classe da linha
     char *start = strchr(line, '{');
     char *end = strchr(line, '}');
     if (start != NULL && end != NULL)
     {
-      *end = '\0'; // Substituir '}' por '\0' para criar uma string válida
+      *end = '\0';
       int classId = atoi(start + 1);
 
-      // Incrementar a contagem para o id_classe
       if (classId >= 0 && classId < MAX_PROCESSES)
       {
         classCounts[classId]++;

@@ -184,9 +184,6 @@ void getIdAssunto(const char *fileName, int idAssunto) {
 }
 
 void getAllIdAssunto(const char *fileName) {
-  Assunto assuntos[MAX_PROCESSES];
-  int total = 0;
-
   FILE *file = fopen(fileName, "r");
 
   if (file == NULL) {
@@ -195,12 +192,13 @@ void getAllIdAssunto(const char *fileName) {
   }
 
   char line[MAX_LINE_LENGTH];
-  int count = 0;
+  int assuntoCounts[MAX_PROCESSES] = {0};
 
   while (fgets(line, MAX_LINE_LENGTH, file)) {
     char *token = strtok(line, ",");
     char *idAssuntoStr = NULL;
 
+    // Encontra o campo "id_assunto" no arquivo CSV
     for (int i = 0; i < 5; i++) {
       token = strtok(NULL, ",");
       if (i == 4) {
@@ -210,32 +208,32 @@ void getAllIdAssunto(const char *fileName) {
     }
 
     if (idAssuntoStr != NULL) {
-      int idAssuntoCsv = atoi(idAssuntoStr + 1);
+      // Remove as chaves {}
+      char *start = strchr(idAssuntoStr, '{');
+      char *end = strchr(idAssuntoStr, '}');
+      if (start != NULL && end != NULL) {
+        *end = '\0';
+        start++; // Pula a chave '{'
 
-      int found = 0;
-      for (int i = 0; i < count; i++) {
-        if (assuntos[i].idAssunto == idAssuntoCsv) {
-          assuntos[i].count++;
-          found = 1;
-          break;
+        // Separa os IDs de assunto separados por vírgulas
+        char *idToken = strtok(start, ",");
+        while (idToken != NULL) {
+          int idAssunto = atoi(idToken);
+          if (idAssunto >= 0 && idAssunto < MAX_PROCESSES) {
+            assuntoCounts[idAssunto]++;
+          }
+          idToken = strtok(NULL, ",");
         }
-      }
-
-      if (!found) {
-        assuntos[count].idAssunto = idAssuntoCsv;
-        assuntos[count].count = 1;
-        count++;
       }
     }
   }
 
   fclose(file);
 
-  total = count;
-
-  printf("Existem %d IDs de assunto diferentes:\n", total);
-  for (int i = 0; i < total; i++) {
-    printf("Assunto %d: %d\n", assuntos[i].idAssunto, assuntos[i].count);
+  for (int i = 0; i < MAX_PROCESSES; i++) {
+    if (assuntoCounts[i] > 0) {
+      printf("id_assunto %d: %d\n", i, assuntoCounts[i]);
+    }
   }
 }
 

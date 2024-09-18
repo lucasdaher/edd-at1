@@ -15,16 +15,16 @@ void enviarMenu() {
 
   do {
     enviarTitulo();
-    printf("\n1. Ordenar em ordem crescente a partir do atributo ID.");
-    printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.");
-    printf("\n3. Contar quantos processos estão vinculados a um determinado ID_CLASSE.");
-    printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.");
+    printf("\n1. Ordenar em ordem crescente a partir do atributo ID.\n");
+    printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.\n");
+    printf("\n3. Contar quantos processos estão vinculados a um determinado ID_CLASSE.\n");
+    printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.\n");
     printf("\n5. Indicar a quantos dias um processo esta em tramitacao na justica.\n\n");
     scanf("%d", &option);
 
     switch(option) {
       case 1:
-        readProcesses("processosOriginal.csv", processes, &numProcesses);
+        readProcesses("../processosOriginal.csv", processes, &numProcesses);
         ordenarPorId(processes, numProcesses);
         break;
       case 3:
@@ -34,14 +34,13 @@ void enviarMenu() {
         scanf("%d", &idClasse);
         system("cls");
 
-        contarPorIdClasse("processosOriginal.csv", idClasse);
+        contarPorIdClasse("../processosOriginal.csv", idClasse);
         break;
       default:
         enviarTitulo();
         printf("A opcao escolhida nao existe.\n");
         printf("Pressione qualquer tecla para tentar novamente...\n");
         getch();
-        system("cls");
     }
   }while(option <= 0 || option > 5);
 

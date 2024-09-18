@@ -3,33 +3,6 @@
 Process processes[MAX_PROCESSES];
 int numProcesses = 0;
 
-void enviarMenuAssunto() {
-  int option;
-  do {
-    printf(" -------------------------------------------------\n");
-    printf("|             MANIPULACAO DE PROCESSOS            |\n");
-    printf("|     Escolha uma opcao do menu para continuar    |\n");
-    printf(" -------------------------------------------------\n");
-    printf("\n");
-    printf("1. Visualizar quantos assuntos constam especificando um ID.\n");
-    printf("2. Visualizar quantos assuntos constam em cada ID de forma geral.\n\n");
-    scanf("%d", &option);
-
-    switch (option) {
-      case 1:
-        int idAssunto;
-        printf("Informe o ID_ASSUNTO que deseja visualizar a quantidade:\n");
-        scanf("%d", &idAssunto);
-        getIdAssunto("../processosOriginal.csv", idAssunto);
-      break;
-      case 2:
-        getAllIdAssunto("../processosOriginal.csv");
-      break;
-      default:
-    }
-  } while(option <= 0 || option > 2);
-}
-
 void enviarTitulo() {
   printf(" -------------------------------------------------\n");
   printf("|             MANIPULACAO DE PROCESSOS            |\n");
@@ -72,8 +45,35 @@ void enviarMenu() {
         printf("Pressione qualquer tecla para tentar novamente...\n");
         getch();
     }
-  }while(option <= 0 || option > 5);
+  } while(option <= 0 || option > 5);
 
+}
+
+void enviarMenuAssunto() {
+  int option;
+  do {
+    printf(" -------------------------------------------------\n");
+    printf("|             MANIPULACAO DE PROCESSOS            |\n");
+    printf("|     Escolha uma opcao do menu para continuar    |\n");
+    printf(" -------------------------------------------------\n");
+    printf("\n");
+    printf("1. Visualizar quantos assuntos constam especificando um ID.\n");
+    printf("2. Visualizar quantos assuntos constam em cada ID de forma geral.\n\n");
+    scanf("%d", &option);
+
+    switch (option) {
+      case 1:
+        int idAssunto;
+      printf("Informe o ID_ASSUNTO que deseja visualizar a quantidade:\n");
+      scanf("%d", &idAssunto);
+      getIdAssunto("../processosOriginal.csv", idAssunto);
+      break;
+      case 2:
+        getAllIdAssunto("../processosOriginal.csv");
+      break;
+      default:
+    }
+  } while(option <= 0 || option > 2);
 }
 
 void readProcesses(const char *fileName, Process processes[], int *numProcesses)
@@ -192,7 +192,7 @@ void getAllIdAssunto(const char *fileName) {
   }
 
   char line[MAX_LINE_LENGTH];
-  int assuntoCounts[MAX_PROCESSES] = {0};
+  int assuntoCounts[20000] = {0};
 
   while (fgets(line, MAX_LINE_LENGTH, file)) {
     char *token = strtok(line, ",");
@@ -208,14 +208,12 @@ void getAllIdAssunto(const char *fileName) {
     }
 
     if (idAssuntoStr != NULL) {
-      // Remove as chaves {}
       char *start = strchr(idAssuntoStr, '{');
       char *end = strchr(idAssuntoStr, '}');
       if (start != NULL && end != NULL) {
         *end = '\0';
-        start++; // Pula a chave '{'
+        start++;
 
-        // Separa os IDs de assunto separados por vírgulas
         char *idToken = strtok(start, ",");
         while (idToken != NULL) {
           int idAssunto = atoi(idToken);

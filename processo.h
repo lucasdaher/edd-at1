@@ -26,5 +26,6 @@ void getIdAssunto(const char *fileName, int idAssunto);
 void getAllIdAssunto(const char *fileName);
 void enviarTitulo();
 void enviarMenu();
+void enviarMenuAssunto();
 
 #endif

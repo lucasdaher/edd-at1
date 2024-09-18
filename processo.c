@@ -30,7 +30,7 @@ void enviarMenu() {
       case 3:
         int idClasse;
 
-        printf("Informe o numero do ID_CLASSE desejado: \n");
+        printf("Informe o numero do 'ID_CLASSE' desejado: \n");
         scanf("%d", &idClasse);
         system("cls");
 
@@ -56,14 +56,14 @@ void enviarMenuAssunto() {
     printf("|     Escolha uma opcao do menu para continuar    |\n");
     printf(" -------------------------------------------------\n");
     printf("\n");
-    printf("1. Visualizar quantos assuntos constam especificando um ID.\n");
-    printf("2. Visualizar quantos assuntos constam em cada ID de forma geral.\n\n");
+    printf("1. Visualizar quantos assuntos constam especificando um 'ID'.\n");
+    printf("2. Visualizar quantos assuntos constam em cada 'ID' de forma geral.\n\n");
     scanf("%d", &opcao);
 
     switch (opcao) {
       case 1:
         int idAssunto;
-        printf("Informe o ID_ASSUNTO que deseja visualizar a quantidade:\n");
+        printf("Informe o 'ID_ASSUNTO' que deseja visualizar a quantidade:\n");
         scanf("%d", &idAssunto);
         listarIdAssunto("../processos.csv", idAssunto);
       break;
@@ -190,11 +190,10 @@ void listarTodosIdAssunto(const char *nomeArquivo) {
     exit(EXIT_FAILURE);
   }
 
-  char linha[1024]; // buffer para ler cada linha do arquivo
-  int id_assuntos[MAX_PROCESSES]; // array para armazenar os id_assuntos
-  int count = 0; // contador de id_assuntos únicos
+  char linha[1024];
+  int id_assuntos[MAX_PROCESSES];
+  int count = 0;
 
-  // Inicialize o array com valores inválidos
   for (int i = 0; i < MAX_PROCESSES; i++) {
     id_assuntos[i] = -1;
   }
@@ -204,9 +203,9 @@ void listarTodosIdAssunto(const char *nomeArquivo) {
     token = strtok(NULL, ",");
     token = strtok(NULL, ",");
     token = strtok(NULL, ",");
-    char *id_assunto_str = token; // extrai o id_assunto da linha
+    char *id_assunto_str = token;
 
-    int id_assunto = atoi(id_assunto_str); // converte para inteiro
+    int id_assunto = atoi(id_assunto_str);
     int encontrado = 0;
     for (int i = 0; i < count; i++) {
       if (id_assuntos[i] == id_assunto) {
@@ -215,7 +214,7 @@ void listarTodosIdAssunto(const char *nomeArquivo) {
       }
     }
     if (!encontrado) {
-      id_assuntos[count++] = id_assunto; // adiciona ao array se não encontrado
+      id_assuntos[count++] = id_assunto;
     }
   }
 

@@ -3,6 +3,33 @@
 Process processes[MAX_PROCESSES];
 int numProcesses = 0;
 
+void enviarMenuAssunto() {
+  int option;
+  do {
+    printf(" -------------------------------------------------\n");
+    printf("|             MANIPULACAO DE PROCESSOS            |\n");
+    printf("|     Escolha uma opcao do menu para continuar    |\n");
+    printf(" -------------------------------------------------\n");
+    printf("\n");
+    printf("1. Visualizar quantos assuntos constam especificando um ID.\n");
+    printf("2. Visualizar quantos assuntos constam em cada ID de forma geral.\n\n");
+    scanf("%d", &option);
+
+    switch (option) {
+      case 1:
+        int idAssunto;
+        printf("Informe o ID_ASSUNTO que deseja visualizar a quantidade:\n");
+        scanf("%d", &idAssunto);
+        getIdAssunto("../processosOriginal.csv", idAssunto);
+      break;
+      case 2:
+        getAllIdAssunto("../processosOriginal.csv");
+      break;
+      default:
+    }
+  } while(option <= 0 || option > 2);
+}
+
 void enviarTitulo() {
   printf(" -------------------------------------------------\n");
   printf("|             MANIPULACAO DE PROCESSOS            |\n");
@@ -15,10 +42,10 @@ void enviarMenu() {
 
   do {
     enviarTitulo();
-    printf("\n1. Ordenar em ordem crescente a partir do atributo ID.\n");
-    printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.\n");
-    printf("\n3. Contar quantos processos estão vinculados a um determinado ID_CLASSE.\n");
-    printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.\n");
+    printf("\n1. Ordenar em ordem crescente a partir do atributo ID.");
+    printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.");
+    printf("\n3. Contar quantos processos estao vinculados a um determinado ID_CLASSE.");
+    printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.");
     printf("\n5. Indicar a quantos dias um processo esta em tramitacao na justica.\n\n");
     scanf("%d", &option);
 
@@ -35,6 +62,9 @@ void enviarMenu() {
         system("cls");
 
         contarPorIdClasse("../processosOriginal.csv", idClasse);
+        break;
+      case 4:
+        enviarMenuAssunto();
         break;
       default:
         enviarTitulo();
@@ -110,6 +140,102 @@ void contarPorIdClasse(const char *fileName, int idClasse) {
     }
   } else {
     printf("O identificador da classe %d nao foi encontrado.\n", idClasse);
+  }
+}
+
+void getIdAssunto(const char *fileName, int idAssunto) {
+  FILE *file = fopen(fileName, "r");
+
+  if (file == NULL) {
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  char line[MAX_LINE_LENGTH];
+  int count = 0;
+
+  while (fgets(line, MAX_LINE_LENGTH, file)) {
+    char *token = strtok(line, ",");
+    char *idAssuntoStr = NULL;
+
+    for (int i = 0; i < 5; i++) {
+      token = strtok(NULL, ",");
+      if (i == 4) {
+        idAssuntoStr = token;
+        break;
+      }
+    }
+
+    if (idAssuntoStr != NULL) {
+      int idAssuntoCsv = atoi(idAssuntoStr + 1);
+      if (idAssuntoCsv == idAssunto) {
+        count++;
+      }
+    }
+  }
+
+  fclose(file);
+
+  if (count > 0) {
+    printf("Existem %d para o assunto %d.\n", count, idAssunto);
+  } else {
+    printf("Nao encontramos nada relacionado ao ID_ASSUNTO %d\n", idAssunto);
+  }
+}
+
+void getAllIdAssunto(const char *fileName) {
+  Assunto assuntos[MAX_PROCESSES];
+  int total = 0;
+
+  FILE *file = fopen(fileName, "r");
+
+  if (file == NULL) {
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  char line[MAX_LINE_LENGTH];
+  int count = 0;
+
+  while (fgets(line, MAX_LINE_LENGTH, file)) {
+    char *token = strtok(line, ",");
+    char *idAssuntoStr = NULL;
+
+    for (int i = 0; i < 5; i++) {
+      token = strtok(NULL, ",");
+      if (i == 4) {
+        idAssuntoStr = token;
+        break;
+      }
+    }
+
+    if (idAssuntoStr != NULL) {
+      int idAssuntoCsv = atoi(idAssuntoStr + 1);
+
+      int found = 0;
+      for (int i = 0; i < count; i++) {
+        if (assuntos[i].idAssunto == idAssuntoCsv) {
+          assuntos[i].count++;
+          found = 1;
+          break;
+        }
+      }
+
+      if (!found) {
+        assuntos[count].idAssunto = idAssuntoCsv;
+        assuntos[count].count = 1;
+        count++;
+      }
+    }
+  }
+
+  fclose(file);
+
+  total = count;
+
+  printf("Existem %d IDs de assunto diferentes:\n", total);
+  for (int i = 0; i < total; i++) {
+    printf("Assunto %d: %d\n", assuntos[i].idAssunto, assuntos[i].count);
   }
 }
 

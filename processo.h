@@ -19,9 +19,16 @@ typedef struct
   int ano_eleicao;
 } Process;
 
+typedef struct {
+  int idAssunto;
+  int count;
+} Assunto;
+
 void readProcesses(const char *fileName, Process processes[], int *numProcesses);
 void ordenarPorId(Process process[], int n);
 void contarPorIdClasse(const char *fileName, int idClasse);
+void getIdAssunto(const char *fileName, int idAssunto);
+void getAllIdAssunto(const char *fileName);
 void enviarTitulo();
 void enviarMenu();
 

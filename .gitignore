@@ -2,6 +2,11 @@
 .vscode/
 .vscode/*
 
+# Pastas do CMake
+cmake-build-debug
+cmake-build-debug/*
+
+# Pastas do CLion
 .idea
 .idea/*
 

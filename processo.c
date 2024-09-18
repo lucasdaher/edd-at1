@@ -24,7 +24,7 @@ void enviarMenu() {
 
     switch(opcao) {
       case 1:
-        lerProcessos("../processosOriginal.csv", processes, &numProcesses);
+        lerProcessos("../processos.csv", processes, &numProcesses);
         ordenarId(processes, numProcesses);
         break;
       case 3:
@@ -34,7 +34,7 @@ void enviarMenu() {
         scanf("%d", &idClasse);
         system("cls");
 
-        contarIdClasse("../processosOriginal.csv", idClasse);
+        contarIdClasse("../processos.csv", idClasse);
         break;
       case 4:
         enviarMenuAssunto();
@@ -65,10 +65,10 @@ void enviarMenuAssunto() {
         int idAssunto;
         printf("Informe o ID_ASSUNTO que deseja visualizar a quantidade:\n");
         scanf("%d", &idAssunto);
-        listarIdAssunto("../processosOriginal.csv", idAssunto);
+        listarIdAssunto("../processos.csv", idAssunto);
       break;
       case 2:
-        listarTodosIdAssunto("../processosOriginal.csv");
+        listarTodosIdAssunto("../processos.csv");
       break;
       default:
     }

@@ -2,12 +2,21 @@
 #define PROCESSO_H
 
 #define MAX_LINE_LENGTH 256
-#define MAX_PROCESSES 18393
+#define MAX_PROCESSES 18392
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+
+typedef struct {
+  int ano;
+  int mes;
+  int dia;
+  int hora;
+  int minuto;
+  int segundo;
+} DataAjuizamento;
 
 typedef struct
 {
@@ -19,13 +28,14 @@ typedef struct
   int ano_eleicao;
 } Process;
 
-void readProcesses(const char *fileName, Process processes[], int *numProcesses);
-void ordenarPorId(Process process[], int n);
-void contarPorIdClasse(const char *fileName, int idClasse);
-void getIdAssunto(const char *fileName, int idAssunto);
-void getAllIdAssunto(const char *fileName);
 void enviarTitulo();
 void enviarMenu();
 void enviarMenuAssunto();
+
+void lerProcessos(const char *fileName, Process processes[], int *numProcesses);
+void contarIdClasse(const char *fileName, int idClasse);
+void listarIdAssunto(const char *fileName, int idAssunto);
+void listarTodosIdAssunto(const char *fileName);
+void ordenarId(Process process[], int n);
 
 #endif

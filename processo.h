@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 
 typedef struct
 {
@@ -21,5 +22,7 @@ typedef struct
 void readProcesses(const char *fileName, Process processes[], int *numProcesses);
 void ordenarPorId(Process process[], int n);
 void contarPorIdClasse(const char *fileName, int idClasse);
+void enviarTitulo();
+void enviarMenu();
 
 #endif

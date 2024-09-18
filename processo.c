@@ -1,8 +1,52 @@
 #include "processo.h"
 
-// Essa função é responsável por contar quantos processos existem dentro
-// do arquivo de processos. Após contabilizar, ele recebe os dados que
-// estão contidos dentro deste CSV e armazenam em um vetor de struct.
+Process processes[MAX_PROCESSES];
+int numProcesses = 0;
+
+void enviarTitulo() {
+  printf(" -------------------------------------------------\n");
+  printf("|             MANIPULACAO DE PROCESSOS            |\n");
+  printf("|     Escolha uma opcao do menu para continuar    |\n");
+  printf(" -------------------------------------------------\n");
+}
+
+void enviarMenu() {
+  int option;
+
+  do {
+    enviarTitulo();
+    printf("\n1. Ordenar em ordem crescente a partir do atributo ID.");
+    printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.");
+    printf("\n3. Contar quantos processos estão vinculados a um determinado ID_CLASSE.");
+    printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.");
+    printf("\n5. Indicar a quantos dias um processo esta em tramitacao na justica.\n\n");
+    scanf("%d", &option);
+
+    switch(option) {
+      case 1:
+        readProcesses("processosOriginal.csv", processes, &numProcesses);
+        ordenarPorId(processes, numProcesses);
+        break;
+      case 3:
+        int idClasse;
+
+        printf("Informe o numero do ID_CLASSE desejado: \n");
+        scanf("%d", &idClasse);
+        system("cls");
+
+        contarPorIdClasse("processosOriginal.csv", idClasse);
+        break;
+      default:
+        enviarTitulo();
+        printf("A opcao escolhida nao existe.\n");
+        printf("Pressione qualquer tecla para tentar novamente...\n");
+        getch();
+        system("cls");
+    }
+  }while(option <= 0 || option > 5);
+
+}
+
 void readProcesses(const char *fileName, Process processes[], int *numProcesses)
 {
   FILE *file = fopen(fileName, "r");
@@ -33,50 +77,6 @@ void readProcesses(const char *fileName, Process processes[], int *numProcesses)
   fclose(file);
 }
 
-// void countClassIds(const char *fileName)
-// {
-//   FILE *file = fopen(fileName, "r");
-//
-//   if (file == NULL)
-//   {
-//     perror("O arquivo nao pode ser lido.\n");
-//     exit(EXIT_FAILURE);
-//   }
-//
-//   char line[MAX_LINE_LENGTH];
-//   int classCounts[MAX_PROCESSES] = {0};
-//
-//   fgets(line, MAX_LINE_LENGTH, file);
-//
-//   while (fgets(line, MAX_LINE_LENGTH, file) != NULL)
-//   {
-//     char *start = strchr(line, '{');
-//     char *end = strchr(line, '}');
-//     if (start != NULL && end != NULL)
-//     {
-//       *end = '\0';
-//       int classId = atoi(start + 1);
-//
-//       if (classId >= 0 && classId < MAX_PROCESSES)
-//       {
-//         classCounts[classId]++;
-//       }
-//     }
-//   }
-//
-//   fclose(file);
-//
-//   // Imprimir os resultados
-//   for (int i = 0; i < MAX_PROCESSES; i++)
-//   {
-//     if (classCounts[i] > 0)
-//     {
-//       printf("id_classe %d: %d processos\n", i, classCounts[i]);
-//     }
-//   }
-// }
-
-
 void contarPorIdClasse(const char *fileName, int idClasse) {
   FILE *file = fopen(fileName, "r");
 
@@ -104,9 +104,13 @@ void contarPorIdClasse(const char *fileName, int idClasse) {
   fclose(file);
 
   if (count > 0) {
-    printf("id_classe %d: %d processos\n", idClasse, count);
+    if (count == 1) {
+      printf("O identificador da classe %d possui %d processo\n", idClasse, count);
+    } else {
+      printf("O identificador da classe %d possui %d processos\n", idClasse, count);
+    }
   } else {
-    printf("id_classe %d nao encontrado.\n", idClasse);
+    printf("O identificador da classe %d nao foi encontrado.\n", idClasse);
   }
 }
 

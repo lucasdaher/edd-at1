@@ -26,8 +26,7 @@ void enviarMenuAssunto();
 
 void lerProcessos(const char *nomeArquivo, Process processos[], int *numProcessos);
 void contarIdClasse(const char *nomeArquivo, int idClasse);
-void listarAssunto(const char *nomeArquivo, int idAssunto);
-void listarTodosAssuntos(const char *nomeArquivo);
+void listarAssuntos(const char *nomeArquivo);
 int compararDatas(const void *a, const void *b);
 void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho);
 void ordenarPorId(Process processos[], int n);

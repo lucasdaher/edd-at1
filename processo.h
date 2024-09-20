@@ -12,9 +12,9 @@
 
 typedef struct
 {
-  long id;
+  int id;
   char numero[20];
-  char data_ajuizamento[20];
+  char data_ajuizamento[24];
   int id_classe;
   int id_assunto;
   int ano_eleicao;

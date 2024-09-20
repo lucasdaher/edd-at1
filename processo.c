@@ -104,10 +104,10 @@ void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho) {
 
   for (int i = 0; i < tamanho; i++)
   {
-    fprintf(arquivo, "%ld,\"%s\",%s,{%d},{%d},%d\n",
+    fprintf(arquivo, "%d,\"%s\",\"%s\",{%d},{%d},%d\n",
             processo[i].id, processo[i].numero, processo[i].data_ajuizamento,
             processo[i].id_classe, processo[i].id_assunto, processo[i].ano_eleicao);
-    printf("%ld - Data gravada com sucesso.\n", processo[i].id);
+    printf("\"%s\" - Data gravada com sucesso.\n", processo[i].data_ajuizamento);
   }
   system("cls");
   printf("Abrindo Excel com os processos ordenados de forma decrescente pelo atributo data_ajuizamento.\n");
@@ -139,7 +139,7 @@ void lerProcessos(const char *nomeArquivo, Process processos[], int *numProcesso
     }
 
     Process p;
-    sscanf(linha, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
+    sscanf(linha, "%d,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
 
     processos[*numProcessos] = p;
     (*numProcessos)++;
@@ -302,10 +302,10 @@ void ordenarPorId(Process processos[], int n)
 
   for (int i = 0; i < n; i++)
   {
-    fprintf(arquivo, "%ld,\"%s\",%s,{%d},{%d},%d\n",
+    fprintf(arquivo, "%d,\"%s\",%s,{%d},{%d},%d\n",
             processos[i].id, processos[i].numero, processos[i].data_ajuizamento,
             processos[i].id_classe, processos[i].id_assunto, processos[i].ano_eleicao);
-    printf("%ld - Gravado com sucesso.\n", processos[i].id);
+    printf("%d - Gravado com sucesso.\n", processos[i].id);
   }
   system("cls");
   printf("Abrindo Excel com os processos ordenados de forma crescente pelo atributo id.\n");

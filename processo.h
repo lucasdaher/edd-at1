@@ -8,21 +8,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
-
-typedef struct {
-  int ano;
-  int mes;
-  int dia;
-  int hora;
-  int minuto;
-  int segundo;
-} DataAjuizamento;
+#include <time.h>
 
 typedef struct
 {
   long id;
   char numero[20];
-  char data_ajuizamento[25];
+  char data_ajuizamento[20];
   int id_classe;
   int id_assunto;
   int ano_eleicao;
@@ -32,10 +24,12 @@ void enviarTitulo();
 void enviarMenu();
 void enviarMenuAssunto();
 
-void lerProcessos(const char *fileName, Process processes[], int *numProcesses);
-void contarIdClasse(const char *fileName, int idClasse);
-void listarIdAssunto(const char *fileName, int idAssunto);
-void listarTodosIdAssunto(const char *fileName);
-void ordenarId(Process process[], int n);
+void lerProcessos(const char *nomeArquivo, Process processos[], int *numProcessos);
+void contarIdClasse(const char *nomeArquivo, int idClasse);
+void listarAssunto(const char *nomeArquivo, int idAssunto);
+void listarTodosAssuntos(const char *nomeArquivo);
+int compararDatas(const void *a, const void *b);
+void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho);
+void ordenarPorId(Process processos[], int n);
 
 #endif

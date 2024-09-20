@@ -1,31 +1,36 @@
 #include "processo.h"
 
-Process processes[MAX_PROCESSES];
-int numProcesses = 0;
-
 void enviarTitulo() {
-  printf(" -------------------------------------------------\n");
-  printf("|             MANIPULACAO DE PROCESSOS            |\n");
-  printf("|     Escolha uma opcao do menu para continuar    |\n");
-  printf(" -------------------------------------------------\n");
+  printf(" --------------------------------------------------\n");
+  printf("|             MANIPULACAO DE PROCESSOS             |\n");
+  printf("|     Escolha uma opcao do menu para prosseguir    |\n");
+  printf(" --------------------------------------------------\n");
 }
 
 void enviarMenu() {
-  int opcao;
+  int option;
 
   do {
+    const char *inputFile = "../processos.csv";
+    Process processes[MAX_PROCESSES];
+    int numProcesses = 0;
+
     enviarTitulo();
     printf("\n1. Ordenar em ordem crescente a partir do atributo ID.");
     printf("\n2. Ordenar em ordem decrescente a partir do atributo DATA_AJUIZAMENTO.");
     printf("\n3. Contar quantos processos estao vinculados a um determinado ID_CLASSE.");
     printf("\n4. Identificar quantos ID_ASSUNTOS constam nos processos presentes na base de dados.");
     printf("\n5. Indicar a quantos dias um processo esta em tramitacao na justica.\n\n");
-    scanf("%d", &opcao);
+    scanf("%d", &option);
 
-    switch(opcao) {
+    switch(option) {
       case 1:
-        lerProcessos("../processos.csv", processes, &numProcesses);
-        ordenarId(processes, numProcesses);
+        lerProcessos(inputFile, processes, &numProcesses);
+        ordenarPorId(processes, numProcesses);
+        break;
+
+      case 2:
+        ordenarPorData(inputFile, processes, numProcesses);
         break;
       case 3:
         int idClasse;
@@ -34,7 +39,7 @@ void enviarMenu() {
         scanf("%d", &idClasse);
         system("cls");
 
-        contarIdClasse("../processos.csv", idClasse);
+        contarIdClasse(inputFile, idClasse);
         break;
       case 4:
         enviarMenuAssunto();
@@ -45,7 +50,7 @@ void enviarMenu() {
         printf("Pressione qualquer tecla para tentar novamente...\n");
         getch();
     }
-  } while(opcao <= 0 || opcao > 5);
+  } while(option <= 0 || option > 5);
 }
 
 void enviarMenuAssunto() {
@@ -65,17 +70,55 @@ void enviarMenuAssunto() {
         int idAssunto;
         printf("Informe o 'ID_ASSUNTO' que deseja visualizar a quantidade:\n");
         scanf("%d", &idAssunto);
-        listarIdAssunto("../processos.csv", idAssunto);
+        listarAssunto("../processos.csv", idAssunto);
       break;
       case 2:
-        listarTodosIdAssunto("../processos.csv");
+        listarTodosAssuntos("../processos.csv");
       break;
       default:
     }
   } while(opcao <= 0 || opcao > 2);
 }
 
-void lerProcessos(const char *nomeArquivo, Process processes[], int *numProcesses)
+// Comparar duas datas em formato de string para ordenação decrescente.
+int compararDatas(const void *a, const void *b) {
+  Process *pA = (Process *)a;
+  Process *pB = (Process *)b;
+  return strcmp(pB->data_ajuizamento, pA->data_ajuizamento);
+}
+
+// Ordena o arquivo de processos em ordem decrescente pelo seu atributo data_ajuizamento.
+void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho) {
+  lerProcessos(nomeArquivo, processo, &tamanho);
+  qsort(processo, tamanho, sizeof(Process), compararDatas);
+
+  FILE *arquivo = fopen("processos.csv", "w");
+
+  if (arquivo == NULL)
+  {
+    perror("O arquivo nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  fprintf(arquivo, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
+
+  for (int i = 0; i < tamanho; i++)
+  {
+    fprintf(arquivo, "%ld,\"%s\",%s,{%d},{%d},%d\n",
+            processo[i].id, processo[i].numero, processo[i].data_ajuizamento,
+            processo[i].id_classe, processo[i].id_assunto, processo[i].ano_eleicao);
+    printf("%ld - Data gravada com sucesso.\n", processo[i].id);
+  }
+  system("cls");
+  printf("Abrindo Excel com os processos ordenados de forma decrescente pelo atributo data_ajuizamento.\n");
+
+  system("start excel.exe processos.csv");
+
+  fclose(arquivo);
+}
+
+// Realiza a leitura do arquivo de processos e escaneia todas as informações presentes nele.
+void lerProcessos(const char *nomeArquivo, Process processos[], int *numProcessos)
 {
   FILE *arquivo = fopen(nomeArquivo, "r");
   if (arquivo == NULL)
@@ -84,27 +127,28 @@ void lerProcessos(const char *nomeArquivo, Process processes[], int *numProcesse
     exit(EXIT_FAILURE);
   }
 
-  char line[MAX_LINE_LENGTH];
-  int position = 0;
+  char linha[MAX_LINE_LENGTH];
+  int posicao = 0;
 
-  while (fgets(line, MAX_LINE_LENGTH, arquivo))
+  while (fgets(linha, MAX_LINE_LENGTH, arquivo))
   {
-    if (position == 0)
+    if (posicao == 0)
     {
-      position++;
+      posicao++;
       continue;
     }
 
     Process p;
-    sscanf(line, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
+    sscanf(linha, "%ld,\"%[^\"]\",%[^,],{%d},{%d},%d", &p.id, p.numero, p.data_ajuizamento, &p.id_classe, &p.id_assunto, &p.ano_eleicao);
 
-    processes[*numProcesses] = p;
-    (*numProcesses)++;
+    processos[*numProcessos] = p;
+    (*numProcessos)++;
   }
 
   fclose(arquivo);
 }
 
+// Contar a quantidade de processos que estão vinculados a um determinado id classe.
 void contarIdClasse(const char *nomeArquivo, int idClasse) {
   FILE *arquivo = fopen(nomeArquivo, "r");
 
@@ -113,36 +157,37 @@ void contarIdClasse(const char *nomeArquivo, int idClasse) {
     exit(EXIT_FAILURE);
   }
 
-  char line[MAX_LINE_LENGTH];
-  int count = 0;
+  char linha[MAX_LINE_LENGTH];
+  int contador = 0;
 
-  while (fgets(line, MAX_LINE_LENGTH, arquivo)) {
-    char *start = strchr(line, '{');
-    char *end = strchr(line, '}');
+  while (fgets(linha, MAX_LINE_LENGTH, arquivo)) {
+    char *start = strchr(linha, '{');
+    char *end = strchr(linha, '}');
     if (start != NULL && end != NULL) {
       *end = '\0';
       int classId = atoi(start + 1);
 
       if (classId == idClasse) {
-        count++;
+        contador++;
       }
     }
   }
 
   fclose(arquivo);
 
-  if (count > 0) {
-    if (count == 1) {
-      printf("O identificador da classe %d possui %d processo\n", idClasse, count);
+  if (contador > 0) {
+    if (contador == 1) {
+      printf("O identificador da classe %d possui %d processo\n", idClasse, contador);
     } else {
-      printf("O identificador da classe %d possui %d processos\n", idClasse, count);
+      printf("O identificador da classe %d possui %d processos\n", idClasse, contador);
     }
   } else {
     printf("O identificador da classe %d nao foi encontrado.\n", idClasse);
   }
 }
 
-void listarIdAssunto(const char *nomeArquivo, int idAssunto) {
+// Listar os processos atrelados ao atributo id assunto especificado pelo usuário.
+void listarAssunto(const char *nomeArquivo, int idAssunto) {
   FILE *arquivo = fopen(nomeArquivo, "r");
 
   if (arquivo == NULL) {
@@ -150,11 +195,11 @@ void listarIdAssunto(const char *nomeArquivo, int idAssunto) {
     exit(EXIT_FAILURE);
   }
 
-  char line[MAX_LINE_LENGTH];
-  int count = 0;
+  char linha[MAX_LINE_LENGTH];
+  int contador = 0;
 
-  while (fgets(line, MAX_LINE_LENGTH, arquivo)) {
-    char *token = strtok(line, ",");
+  while (fgets(linha, MAX_LINE_LENGTH, arquivo)) {
+    char *token = strtok(linha, ",");
     char *idAssuntoStr = NULL;
 
     for (int i = 0; i < 5; i++) {
@@ -168,21 +213,22 @@ void listarIdAssunto(const char *nomeArquivo, int idAssunto) {
     if (idAssuntoStr != NULL) {
       int idAssuntoCsv = atoi(idAssuntoStr + 1);
       if (idAssuntoCsv == idAssunto) {
-        count++;
+        contador++;
       }
     }
   }
 
   fclose(arquivo);
 
-  if (count > 0) {
-    printf("Existem %d para o assunto %d.\n", count, idAssunto);
+  if (contador > 0) {
+    printf("Existem %d para o assunto %d.\n", contador, idAssunto);
   } else {
     printf("Nao encontramos nada relacionado ao ID_ASSUNTO %d\n", idAssunto);
   }
 }
 
-void listarTodosIdAssunto(const char *nomeArquivo) {
+// Listar a quantidade de processos atrelados a cada atributo id assunto.
+void listarTodosAssuntos(const char *nomeArquivo) {
   FILE *arquivo = fopen(nomeArquivo, "r");
 
   if (arquivo == NULL) {
@@ -192,7 +238,7 @@ void listarTodosIdAssunto(const char *nomeArquivo) {
 
   char linha[1024];
   int id_assuntos[MAX_PROCESSES];
-  int count = 0;
+  int contador = 0;
 
   for (int i = 0; i < MAX_PROCESSES; i++) {
     id_assuntos[i] = -1;
@@ -207,25 +253,25 @@ void listarTodosIdAssunto(const char *nomeArquivo) {
 
     int id_assunto = atoi(id_assunto_str);
     int encontrado = 0;
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < contador; i++) {
       if (id_assuntos[i] == id_assunto) {
         encontrado = 1;
         break;
       }
     }
     if (!encontrado) {
-      id_assuntos[count++] = id_assunto;
+      id_assuntos[contador++] = id_assunto;
     }
   }
 
   fclose(arquivo);
 
-  printf("Quantidade de id_assuntos unicos: %d\n", count);
+  printf("Quantidade de id_assuntos unicos: %d\n", contador);
 }
 
-void ordenarId(Process process[], int n)
+// Função que ordena os processos pelo atributo id.vv
+void ordenarPorId(Process processos[], int n)
 {
-  // Algoritmo de ordenação | Selection Sort
   int min;
   Process temp;
   for (int i = 0; i < n - 1; i++)
@@ -233,15 +279,15 @@ void ordenarId(Process process[], int n)
     min = i;
     for (int j = i + 1; j < n; j++)
     {
-      if (process[j].id < process[min].id)
+      if (processos[j].id < processos[min].id)
       {
         min = j;
       }
     }
 
-    temp.id = process[min].id;
-    process[min].id = process[i].id;
-    process[i].id = temp.id;
+    temp.id = processos[min].id;
+    processos[min].id = processos[i].id;
+    processos[i].id = temp.id;
   }
 
   FILE *arquivo = fopen("processos.csv", "w");
@@ -252,18 +298,17 @@ void ordenarId(Process process[], int n)
     exit(EXIT_FAILURE);
   }
 
-  // Adiciona o HEADER do arquivo CSV antes da implementação dos dados.
   fprintf(arquivo, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
 
   for (int i = 0; i < n; i++)
   {
     fprintf(arquivo, "%ld,\"%s\",%s,{%d},{%d},%d\n",
-            process[i].id, process[i].numero, process[i].data_ajuizamento,
-            process[i].id_classe, process[i].id_assunto, process[i].ano_eleicao);
-    printf("%ld - Gravado com sucesso.\n", process[i].id);
+            processos[i].id, processos[i].numero, processos[i].data_ajuizamento,
+            processos[i].id_classe, processos[i].id_assunto, processos[i].ano_eleicao);
+    printf("%ld - Gravado com sucesso.\n", processos[i].id);
   }
   system("cls");
-  printf("Abrindo Excel com os processos ordenados de forma crescente pelo seu identificador.\n");
+  printf("Abrindo Excel com os processos ordenados de forma crescente pelo atributo id.\n");
 
   system("start excel.exe processos.csv");
 

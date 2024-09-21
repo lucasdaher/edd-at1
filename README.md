@@ -14,5 +14,3 @@ O programa a ser construído deve ler dados de cada processo, identificando cada
 - Lucas Daher: [https://github.com/lucasdaher](https://github.com/lucasdaher)
 - Marcos Alexandre: [https://github.com/marcxsdev](https://github.com/marcxsdev)
 - Maria Eduarda: [https://github.com/dudamarqs](https://github.com/dudamarqs)
-
-###### Trabalho em desenvolvimento...

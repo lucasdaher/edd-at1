@@ -30,5 +30,8 @@ void listarAssuntos(const char *nomeArquivo);
 int compararDatas(const void *a, const void *b);
 void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho);
 void ordenarPorId(Process processos[], int n);
+int compararTempos(const char *date1, const char *date2);
+void indicarDiasEmTramitacao(const char *nomeArquivo);
+void converterDiaParaTempo(int d);
 
 #endif

@@ -44,6 +44,9 @@ void enviarMenu() {
       case 4:
         listarAssuntos(inputFile);
         break;
+      case 5:
+        indicarDiasEmTramitacao(inputFile);
+        break;
       default:
         enviarTitulo();
         printf("A opcao escolhida nao existe.\n");
@@ -261,7 +264,7 @@ void listarAssuntos(const char *nomeArquivo) {
   } while(opcao <= 0 || opcao > 2);
 }
 
-// Função que ordena os processos pelo atributo id.vv
+// Função que ordena os processos pelo atributo id.
 void ordenarPorId(Process processos[], int n)
 {
   int min;
@@ -300,6 +303,85 @@ void ordenarPorId(Process processos[], int n)
             processos[i].id_classe, processos[i].id_assunto, processos[i].ano_eleicao);
   }
   system("start excel.exe processos.csv");
+
+  fclose(arquivo);
+}
+
+// Converter o resultado em dias para tempo formatado.
+void converterDiaParaTempo(int d) {
+  int anos = d / 365;
+  int dias = d % 365;
+  int horas = dias % 24;
+  int minutos = (dias % 24) % 60;
+
+  printf("O processo esta em tramitacao faz %d ano(s), %d dia(s), %d hora(s), %d minuto(s).\n", anos, dias, horas, minutos);
+}
+
+// Compara a diferença entre duas datas distintas.
+int compararTempos(const char *date1, const char *date2) {
+  struct tm tm1, tm2;
+  int ano1, mes1, dia1, hora1, min1, seg1;
+  int ano2, mes2, dia2, hora2, min2, seg2;
+
+  sscanf(date1, "%d-%d-%d %d:%d:%d", &ano1, &mes1, &dia1, &hora1, &min1, &seg1);
+  sscanf(date2, "%d-%d-%d %d:%d:%d", &ano2, &mes2, &dia2, &hora2, &min2, &seg2);
+
+  tm1.tm_year = ano1 - 1900;
+  tm1.tm_mon = mes1 - 1;
+  tm1.tm_mday = dia1;
+  tm1.tm_hour = hora1;
+  tm1.tm_min = min1;
+  tm1.tm_sec = seg1;
+
+  tm2.tm_year = ano2 - 1900;
+  tm2.tm_mon = mes2 - 1;
+  tm2.tm_mday = dia2;
+  tm2.tm_hour = hora2;
+  tm2.tm_min = min2;
+  tm2.tm_sec = seg2;
+
+  time_t t1 = mktime(&tm1);
+  time_t t2 = mktime(&tm2);
+  double diff = difftime(t2, t1);
+  return (int) diff / 86400;
+}
+
+// Função que indica quantos dias um processo está em tramitação na justiça.
+void indicarDiasEmTramitacao(const char *nomeArquivo) {
+  FILE *arquivo = fopen(nomeArquivo, "r");
+  if (arquivo == NULL) {
+    perror("O arquivo de processos nao pode ser lido.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  int id_processo;
+  printf("Informe o id do processo que deseja visualizar o tempo de tramitacao: \n");
+  scanf("%d", &id_processo);
+
+  char linha[MAX_LINE_LENGTH];
+  int encontrado = 0;
+  while (fgets(linha, MAX_LINE_LENGTH, arquivo)) {
+    char *token = strtok(linha, ",");
+    int id = atoi(token);
+    if (id == id_processo) {
+      token = strtok(NULL, ",");
+      token = strtok(NULL, ",");
+      char *data_ajuizamento = token;
+      // Calculate the difference between the current date and the data_ajuizamento date
+      time_t now = time(NULL);
+      struct tm *current_tm = localtime(&now);
+      char current_date[20];
+      strftime(current_date, 20, "%Y-%m-%d %H:%M:%S", current_tm);
+      int dias_em_tramitacao = compararTempos(data_ajuizamento, current_date);
+      converterDiaParaTempo(dias_em_tramitacao);
+      encontrado = 1;
+      break;
+    }
+  }
+
+  if (!encontrado) {
+    printf("Processo nao encontrado.\n");
+  }
 
   fclose(arquivo);
 }

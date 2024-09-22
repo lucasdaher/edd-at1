@@ -241,7 +241,6 @@ void listarAssuntos(const char *nomeArquivo) {
   printf("1) Visualizar a quantidade vezes que um \"id_assunto\" aparece em cada processo.\n");
   printf("2) Voltar ao menu principal\n");
   scanf("%d", &opcao);
-  system("cls");
 
   do {
     switch(opcao) {

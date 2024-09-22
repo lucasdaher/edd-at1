@@ -211,7 +211,6 @@ void listarAssuntos(const char *nomeArquivo) {
           char *id_assunto_str = start + 1;
           char *token_id_assunto = strtok(id_assunto_str, ",");
           while (token_id_assunto != NULL) {
-            // Remover espaços em branco do início e do fim do token
             token_id_assunto = trim(token_id_assunto);
             int id_assunto = atoi(token_id_assunto);
             int encontrado = 0;

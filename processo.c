@@ -155,7 +155,7 @@ void contarIdClasse(const char *nomeArquivo, int idClasse) {
     char *end = strchr(linha, '}');
     if (start != NULL && end != NULL) {
       *end = '\0';
-      char *idClasseStr = start + 1; // skip the '{' character
+      char *idClasseStr = start + 1;
       char *token = strtok(idClasseStr, ",");
       while (token != NULL) {
         int classId = atoi(token);
@@ -211,6 +211,8 @@ void listarAssuntos(const char *nomeArquivo) {
           char *id_assunto_str = start + 1;
           char *token_id_assunto = strtok(id_assunto_str, ",");
           while (token_id_assunto != NULL) {
+            // Remover espaços em branco do início e do fim do token
+            token_id_assunto = trim(token_id_assunto);
             int id_assunto = atoi(token_id_assunto);
             int encontrado = 0;
             for (int i = 0; i < contador; i++) {
@@ -261,6 +263,16 @@ void listarAssuntos(const char *nomeArquivo) {
     }
 
   } while(opcao <= 0 || opcao > 2);
+}
+
+// Função para remover espaços em branco do início e do fim de uma string.
+char* trim(char* str) {
+  if (str == NULL) return NULL;
+  int len = strlen(str);
+  while (len > 0 && isspace(str[len - 1])) len--;
+  str[len] = '\0';
+  while (*str && isspace(*str)) str++;
+  return str;
 }
 
 // Função que ordena os processos pelo atributo id.

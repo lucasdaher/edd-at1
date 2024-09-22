@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
+#include <ctype.h>
 
 typedef struct
 {
@@ -27,6 +28,7 @@ void enviarMenuAssunto();
 void lerProcessos(const char *nomeArquivo, Process processos[], int *numProcessos);
 void contarIdClasse(const char *nomeArquivo, int idClasse);
 void listarAssuntos(const char *nomeArquivo);
+char* trim(char* str);
 int compararDatas(const void *a, const void *b);
 void ordenarPorData(const char *nomeArquivo, Process processo[], int tamanho);
 void ordenarPorId(Process processos[], int n);

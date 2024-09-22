@@ -250,11 +250,9 @@ void listarAssuntos(const char *nomeArquivo) {
         for (int i = 0; i < contador; i++) {
           printf("O \"id_assunto\" %d aparece %d vezes na base de dados.\n", id_assuntos[i], frequencia[i]);
         }
-        system("cls");
       break;
       case 2:
         enviarMenu();
-        system("cls");
         break;
       default:
         printf("A opcao informada esta invalida, saindo do programa...\n");

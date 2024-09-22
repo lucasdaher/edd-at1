@@ -203,12 +203,12 @@ void listarAssuntos(const char *nomeArquivo) {
     char *token = strtok(linha, ",");
     int campo = 0;
     while (token != NULL) {
-      if (campo == 4) { // id_assunto is the 5th field
+      if (campo == 4) {
         char *start = strchr(token, '{');
         char *end = strchr(token, '}');
         if (start != NULL && end != NULL) {
           *end = '\0';
-          char *id_assunto_str = start + 1; // skip the '{' character
+          char *id_assunto_str = start + 1;
           char *token_id_assunto = strtok(id_assunto_str, ",");
           while (token_id_assunto != NULL) {
             int id_assunto = atoi(token_id_assunto);
@@ -293,7 +293,7 @@ void ordenarPorId(Process processos[], int n)
     exit(EXIT_FAILURE);
   }
 
-  printf("Gerando o seu arquivo ordenado em ordem decrescente pelo atributo data_ajuizamento...\n");
+  printf("Gerando o seu arquivo ordenado em ordem crescente pelo atributo id...\n");
   fprintf(arquivo, "\"id\",\"numero\",\"data_ajuizamento\",\"id_classe\",\"id_assunto\",\"ano_eleicao\"\n");
 
   for (int i = 0; i < n; i++)
